@@ -1,0 +1,15 @@
+syntax = "proto3";
+package proto;
+option go_package="github.com/aimamit/hostand/proxy-server/proto";
+
+service Proxy {
+  rpc GetContainerIp(AppVersionP) returns (IPResponse) {};
+}
+
+message AppVersionP{
+  string domain=1;
+}
+
+message IPResponse {
+  string ip=1;
+}

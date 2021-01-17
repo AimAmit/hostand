@@ -1,0 +1,76 @@
+version: '3'
+services:
+
+  nginx:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    ports:
+    - 80:80
+    depends_on:
+      - web
+      - proxy_app
+    networks:
+      - main
+
+  web:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./web
+    env_file:
+      - ./web/.env
+    depends_on:
+      - main_app
+    networks:
+      - main
+
+  main_app:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./main-server
+    environment:
+      - REDIS_URL=redis:6379
+      - DOCKER_HOST=docker_app
+    depends_on:
+      - docker_app
+#    expose:
+#      - 8000
+#    ports:
+#    - 8000:8000
+    networks:
+      - main
+
+
+  proxy_app:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy-server
+    environment:
+      - MAIN_HOST=main_app
+    networks:
+      - main
+
+
+  docker_app:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./docker-server
+    networks:
+      - main
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+    - 50051:50051
+
+  redis:
+    image: redis:6.0.3-alpine
+    networks:
+      - main
+
+networks:
+  main:

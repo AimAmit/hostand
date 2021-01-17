@@ -1,0 +1,15 @@
+syntax = "proto3";
+package proto;
+option go_package="github.com/aimamit/hostand/main-server/proto";
+
+service Proxy {
+  rpc GetContainerId(SubDomain) returns (IPResponseP) {};
+}
+
+message SubDomain{
+  string sub_domain=1;
+}
+
+message IPResponseP {
+  string ip=1;
+}
