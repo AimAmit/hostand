@@ -19,7 +19,7 @@ func main() {
 	InterServerCall.Main = remote.ClientInit()
 
 	http.HandleFunc("/", handleRequestAndRedirect)
-	log.Fatalln(http.ListenAndServe(":2020", nil))
+	log.Fatalln(http.ListenAndServe(":80", nil))
 }
 
 func handleRequestAndRedirect(res http.ResponseWriter, req *http.Request) {

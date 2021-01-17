@@ -2,9 +2,11 @@ package remote
 
 import (
 	"flag"
+	"fmt"
 	"github.com/aimamit/hostand/proxy-server/proto"
 	"google.golang.org/grpc"
 	"log"
+	"os"
 )
 
 type ServerCall struct {
@@ -12,7 +14,8 @@ type ServerCall struct {
 }
 
 func ClientInit() proto.ProxyClient {
-	serverAddress := flag.String("address", "0.0.0.0:50051", "tcp")
+	MainHost := os.Getenv("MAIN_HOST")
+	serverAddress := flag.String("address", fmt.Sprintf("%s:50051", MainHost), "tcp")
 	flag.Parse()
 	log.Printf("dial server %s", *serverAddress)
 
